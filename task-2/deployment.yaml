@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: upgloadme
+spec:
+  replicas: 2
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 0
+      maxUnavailable: 3
+  selector:
+    matchLabels:
+      app: frontend
+  template:
+    metadata:
+      name: upgloadme
+      labels:
+         app: frontend
+    spec:
+      tolerations:
+      - key: "capstone"
+        operator: "Equal"
+        value: "true"
+        effect: "NoSchedule"
+      containers:
+      - name: upgloadme-name
+        image: 374590584164.dkr.ecr.us-east-1.amazonaws.com/capstone-frontend:latest
+        resources:
+          requests:
+            memory: "200Mi"
+            cpu: "1m"
+          limits:
+            memory: "500Mi"
+            cpu: "2m"
